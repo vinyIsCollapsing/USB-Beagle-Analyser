@@ -6,3 +6,35 @@ Key Features:
 
     CSV Parsing: Reads and interprets CSV files exported from the Total Phase Data Center Analyzer.
     Data Analysis: Filters and groups USB transactions to identify critical events, errors, and communication patterns.
+
+## Building the Project
+
+To build the project, open a terminal in the root directory of the repository and run:
+
+```bash
+make
+```
+
+This command will:
+
+    Compile the source files located in the src/ directory.
+    Generate object files in the obj/ directory.
+    Create the final executable in the bin/ directory (for example, named usb_analyzer).
+
+## Cleaning Generated Files
+
+If you want to remove the generated build files (the bin/ and obj/ directories), run:
+
+```bash
+make clean
+```
+
+This command deletes the build directories and files, keeping your repository clean.
+
+## Running the application
+
+After building, the executable will be located in the bin/ directory. To run the program, use:
+
+```bash
+./bin/usb-analyzer
+```

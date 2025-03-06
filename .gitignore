@@ -1,0 +1,24 @@
+# Diretórios de build
+/bin/
+/obj/
+
+# Arquivos objeto e binários
+*.o
+*.exe
+*.out
+
+# Arquivos temporários e backups
+*~
+*.swp
+*.tmp
+
+# Logs e outros arquivos gerados
+*.log
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Diretórios de IDEs (opcional)
+.vscode/
+.idea/
