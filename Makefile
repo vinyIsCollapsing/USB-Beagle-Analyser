@@ -1,6 +1,7 @@
 # Variáveis do compilador e flags
 CXX         := g++
-CXXFLAGS    := -std=c++17 -Wall -Iinclude
+CXXFLAGS    := -std=c++17 -Wall -Iinclude -Iexternal/csv-parser/single_include
+
 
 # Diretórios
 SRC_DIR     := src
@@ -14,16 +15,22 @@ TARGET      := $(BIN_DIR)/usb_analyzer
 SOURCES     := $(wildcard $(SRC_DIR)/*.cpp)
 # Gerar os nomes dos arquivos objeto correspondentes
 OBJECTS     := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+CSV_OBJECTS := $(patsubst external/csv-parser/src/%.cpp, $(OBJ_DIR)/%.o, $(CSV_SOURCES))
 
 # Regra padrão: compilar o executável
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) $(CSV_OBJECTS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Regra para compilar arquivos .cpp para .o
+# Regra para compilar arquivos .cpp do seu projeto
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Regra para compilar arquivos .cpp da biblioteca csv-parser
+$(OBJ_DIR)/%.o: external/csv-parser/src/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

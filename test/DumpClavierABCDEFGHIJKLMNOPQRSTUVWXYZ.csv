@@ -4,7 +4,7 @@
 #
 # qui mar 06 09:05:44 2025
 #
-# Level,Sp,Index,m:s.ms.us,Dur,Len,Err,Dev,Ep,Record,Summary
+Level,Sp,Index,m:s.ms.us,Dur,Len,Err,Dev,Ep,Record,Summary
 0,,0,0:00.000.000,,,,,,Capture started (Aggregate),[qui 20 fev 2025 09:53:56]
 0,,1,0:00.000.024,,,,,,<Reset> / <Target disconnected>,
 0,,2,0:02.807.253,,,,,,<Unreset> / <Target connected>,
