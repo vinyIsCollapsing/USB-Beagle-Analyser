@@ -10,15 +10,30 @@ using namespace std;
 enum class TransactionType {
     GetDeviceDescriptor,
     SetAddress,
+    GetConfigurationDescriptor,
+    GetStringDescriptor,
+    SetConfiguration,
+    ControlTransfer,
+    GetDeviceStatus,
     Other // Para transações que não se enquadram nos casos principais
 };
 
 // Função que converte a string do registro para o TransactionType
 TransactionType getTransactionType(const std::string &transactionStr) {
-    if (transactionStr.find("Get Device Descriptor") != std::string::npos)
+    if(transactionStr.find("Get Device Descriptor") != std::string::npos)
         return TransactionType::GetDeviceDescriptor;
-    else if (transactionStr.find("Set Address") != std::string::npos)
+    else if(transactionStr.find("Set Address") != std::string::npos)
         return TransactionType::SetAddress;
+    else if(transactionStr.find("Get Configuration Descriptor") != std::string::npos)
+        return TransactionType::GetConfigurationDescriptor;
+    else if(transactionStr.find("Get String Descriptor") != std::string::npos)
+        return TransactionType::GetStringDescriptor;
+    else if(transactionStr.find("Set Configuration") != std::string::npos)
+        return TransactionType::SetConfiguration;
+    else if(transactionStr.find("Control Transfer") != std::string::npos)
+        return TransactionType::ControlTransfer;
+    else if(transactionStr.find("Get Device Status") != std::string::npos)
+        return TransactionType::GetDeviceStatus;
     else
         return TransactionType::Other;
 }
@@ -35,7 +50,7 @@ size_t countLeadingSpaces(const std::string &str) {
 }
 
 int main() {
-    CSVReader reader("../USB-Beagle-Analyser/test/DumpClavierABCDEFGHIJKLMNOPQRSTUVWXYZ.csv");
+    CSVReader reader("../USB-Beagle-Analyser/test/DumpClavier.csv");
     vector<Transaction> transactions;
     Transaction currentTransaction;
     bool capturando = false;
@@ -88,15 +103,37 @@ int main() {
         switch (trans.type) {
             case TransactionType::GetDeviceDescriptor:
                 cout << "Traitement de transaction: Get Device Descriptor" << endl;
+                /*
                 for (const auto& row : trans.rows) {
                     cout << row["Record"].get<string>() << endl;
                 }
                 cout << "--------------------------" << endl;
+                */
                 break;
             case TransactionType::SetAddress:
                 cout << "Traitement de transaction: Set Address" << endl;
-                // Adicione aqui o processamento específico para Set Address
-                break;  
+                
+                break;
+            case TransactionType::GetConfigurationDescriptor:
+                cout << "Traitement de transaction: Get Configuration Descriptor" << endl;
+                
+                break;
+            case TransactionType::GetStringDescriptor:
+                cout << "Traitement de transaction: Get String Descriptor" << endl;
+                
+                break;
+            case TransactionType::SetConfiguration:
+                cout << "Traitement de transaction: Set Configuration" << endl;
+                
+                break;
+            case TransactionType::ControlTransfer:
+                cout << "Traitement de transaction: Control Transfer" << endl;
+                
+                break;
+            case TransactionType::GetDeviceStatus:
+                cout << "Traitement de transaction: Get Device Status" << endl;
+                
+                break;
             default:
                 cout << "Transaction n'est pas connu" << endl;
                 break;
