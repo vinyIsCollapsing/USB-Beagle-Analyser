@@ -2,87 +2,19 @@
 #include <string>
 #include <vector>
 #include "csv.hpp"
+#include "usb_parser.h"
 
-using namespace csv;
 using namespace std;
-
-// Define os tipos de descritores
-enum class DescriptorTypes {
-    DeviceDescriptor,
-    ConfigurationDescriptor,
-    InterfaceDescriptor,
-    EndpointDescriptor,
-    StringDescriptor,
-    Other   // Para descritores que não se encaixam nos casos principais
-};
-
-// Define os tipos de requisições
-enum class RequestTypes {
-    CLEAR_FEATURE,
-    GET_CONFIGURATION,
-    GET_DESCRIPTOR,
-    GET_INTERFACE,
-    GET_STATUS,
-    SET_ADDRESS,
-    SET_CONFIGURATION,
-    SET_DESCRIPTOR,
-    SET_FEATURE,
-    SET_INTERFACE,
-    SYNCH_FRAME,
-    ControlTransfer,
-    GetDeviceStatus,
-    Other   // Para transações que não se encaixam nos casos principais
-};
-
-// Função que converte a string do registro para o DescriptorTypes
-DescriptorTypes getDescriptorTypes(const std::string &descriptorStr) {
-    if (descriptorStr.find("Device Descriptor") != std::string::npos)
-        return DescriptorTypes::DeviceDescriptor;
-    else if (descriptorStr.find("Configuration Descriptor") != std::string::npos)
-        return DescriptorTypes::ConfigurationDescriptor;
-    else if (descriptorStr.find("Interface Descriptor") != std::string::npos)
-        return DescriptorTypes::InterfaceDescriptor;
-    else if (descriptorStr.find("Endpoint Descriptor") != std::string::npos)
-        return DescriptorTypes::EndpointDescriptor;
-    else if (descriptorStr.find("String Descriptor") != std::string::npos)
-        return DescriptorTypes::StringDescriptor;
-    else
-        return DescriptorTypes::Other;
-}
-
-// Função que converte a string do registro para o RequestTypes
-RequestTypes getRequestTypes(const std::string &requestStr) {
-    if (requestStr.find("Clear Feature") != std::string::npos)
-        return RequestTypes::CLEAR_FEATURE;
-    else if (requestStr.find("Set Configuration") != std::string::npos)
-        return RequestTypes::SET_CONFIGURATION;
-    // Outras verificações podem ser adicionadas conforme necessário
-    else
-        return RequestTypes::Other;
-}
-
-// Estrutura para armazenar uma transação
-struct Transaction {
-    DescriptorTypes descriptorType = DescriptorTypes::Other;
-    RequestTypes requestType = RequestTypes::Other;
-    vector<CSVRow> rows;
-};
-
-// Função auxiliar para contar os espaços iniciais (indentação)
-size_t countLeadingSpaces(const std::string &str) {
-    size_t pos = str.find_first_not_of(' ');
-    return (pos == std::string::npos) ? str.size() : pos;
-}
+using namespace csv;
 
 int main() {
-    // Lê o arquivo CSV (certifique-se que o caminho esteja correto)
+    // Certifique-se de que o caminho para o CSV esteja correto
     CSVReader reader("../USB-Beagle-Analyser/test/DumpClavier.csv");
     vector<Transaction> transactions;
     Transaction currentTransaction;
     bool capturando = false;
     size_t nivelInicial = 0;  // Nível de indentação da linha que inicia a transação
 
-    // Percorre cada linha do CSV
     for (CSVRow &row : reader) {
         string record = row["Record"].get<string>();
         if (record.empty())
@@ -98,7 +30,6 @@ int main() {
 
             // Se o registro iniciar uma transação (descritor ou requisição)
             if (dType != DescriptorTypes::Other || rType != RequestTypes::Other) {
-                // Finaliza a transação anterior, se houver
                 if (capturando) {
                     transactions.push_back(currentTransaction);
                     currentTransaction.rows.clear();
@@ -110,7 +41,7 @@ int main() {
                 currentTransaction.rows.push_back(row);
                 continue;
             }
-            // Se encontrar uma linha sem indentação que não inicia transação, finaliza a transação atual
+            // Linha sem indentação que não inicia transação finaliza a transação atual
             if (capturando) {
                 transactions.push_back(currentTransaction);
                 currentTransaction.rows.clear();
