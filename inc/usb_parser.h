@@ -42,11 +42,15 @@ RequestTypes getRequestTypes(const std::string &requestStr);
 // Função auxiliar para contar os espaços iniciais (indentação)
 size_t countLeadingSpaces(const std::string &str);
 
+bool isAdditionalINTransaction(const std::string &summary);
+
 // Estrutura para armazenar uma transação
 struct Transaction {
     DescriptorTypes descriptorType = DescriptorTypes::Other;
     RequestTypes requestType = RequestTypes::Other;
     std::vector<csv::CSVRow> rows;
+    std::vector<std::string> data0Packets; // Armazena os dados dos pacotes DATA0
+    std::vector<std::string> data1Packets; // Armazena os dados dos pacotes DATA1
 };
 
 #endif // USB_PARSER_H
