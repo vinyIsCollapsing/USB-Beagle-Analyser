@@ -18,15 +18,39 @@ DescriptorTypes getDescriptorTypes(const string &descriptorStr) {
         return DescriptorTypes::Other;
 }
 
-RequestTypes getRequestTypes(const string &requestStr) {
-    if (requestStr.find("Clear Feature") != string::npos)
+RequestTypes getRequestTypes(const std::string &requestStr) {
+    if (requestStr.find("Clear Feature") != std::string::npos)
         return RequestTypes::CLEAR_FEATURE;
-    else if (requestStr.find("Set Configuration") != string::npos)
+    else if (requestStr.find("Set Configuration") != std::string::npos)
         return RequestTypes::SET_CONFIGURATION;
-    // Outras verificações podem ser adicionadas conforme necessário
+    else if (requestStr.find("Get Device Descriptor") != std::string::npos)
+        return RequestTypes::GET_DESCRIPTOR;
+    else if (requestStr.find("Get Configuration Descriptor") != std::string::npos)
+        return RequestTypes::GET_DESCRIPTOR;
+    else if (requestStr.find("Get String Descriptor") != std::string::npos)
+        return RequestTypes::GET_DESCRIPTOR;
+    else if (requestStr.find("Get Interface") != std::string::npos)
+        return RequestTypes::GET_INTERFACE;
+    else if (requestStr.find("Get Status") != std::string::npos)
+        return RequestTypes::GET_STATUS;
+    else if (requestStr.find("Set Address") != std::string::npos)
+        return RequestTypes::SET_ADDRESS;
+    else if (requestStr.find("Set Descriptor") != std::string::npos)
+        return RequestTypes::SET_DESCRIPTOR;
+    else if (requestStr.find("Set Feature") != std::string::npos)
+        return RequestTypes::SET_FEATURE;
+    else if (requestStr.find("Set Interface") != std::string::npos)
+        return RequestTypes::SET_INTERFACE;
+    else if (requestStr.find("SYNCH_FRAME") != std::string::npos || requestStr.find("SYNCH") != std::string::npos)
+        return RequestTypes::SYNCH_FRAME;
+    else if (requestStr.find("Control Transfer") != std::string::npos)
+        return RequestTypes::ControlTransfer;
+    else if (requestStr.find("Get Device Status") != std::string::npos)
+        return RequestTypes::GetDeviceStatus;
     else
         return RequestTypes::Other;
 }
+
 
 size_t countLeadingSpaces(const string &str) {
     size_t pos = str.find_first_not_of(' ');
